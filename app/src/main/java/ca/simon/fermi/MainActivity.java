@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnReset;
     TextView txtGuesses;
     ArrayAdapter arrayAdapter;
+    Boolean firstGuess;
     Fermi fermi;
 
     @Override
@@ -44,12 +45,18 @@ public class MainActivity extends AppCompatActivity {
         spinner1.setAdapter(arrayAdapter);
         spinner2.setAdapter(arrayAdapter);
         spinner3.setAdapter(arrayAdapter);
+        firstGuess = true;
 
-        
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fermi.reset();
+                Reset();
+            }
+        });
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makeGuess();
             }
         });
     }
@@ -67,12 +74,32 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    public void makeGuess(){
+        if(firstGuess) {
+            txtGuesses.setText("");
+            firstGuess = false;
+        }
+        txtGuesses.setText(fermi.guess((Integer) spinner1.getSelectedItem(),
+                (Integer) spinner2.getSelectedItem(), (Integer) spinner3.getSelectedItem()) + "\n" + txtGuesses.getText());
+        if(fermi.win()){
+            onWin();
+        }
+    }
+
+    public void Reset(){
+        fermi.reset();
+        btnOk.setEnabled(true);
+    }
+
+    public void onWin(){
+        txtGuesses.setText("Congrats! Total Guesses: " + fermi.getGuesses() + "\n" + txtGuesses.getText());
+        btnOk.setEnabled(false);
     }
 }

@@ -1,6 +1,8 @@
 package ca.simon.fermi;
 
 
+import android.util.Log;
+
 /**
  *  Object Oriented Programming : Project II
  *  Fermi Guessing Game
@@ -17,6 +19,8 @@ public class Fermi {
     /** the number of guesses made for the current game */
     private int guesses;
 
+    private boolean win;
+
     /**
      * Creates a new instance of the game with three distinct random numbers
      * to guess.
@@ -30,6 +34,9 @@ public class Fermi {
         return guesses;
     }
 
+    public boolean win(){
+        return win;
+    }
     // --------------------------------------------------------------- public methods
     /**
      * resets fermi object and thus generates three distinct random numbers in the range of 0-9
@@ -37,7 +44,7 @@ public class Fermi {
     public void reset() {
         // initialization
         guesses = 0;
-
+        win = false;
         // randomly determine target numbers
         first = (int) (Math.random() * 10);
         do {
@@ -49,7 +56,7 @@ public class Fermi {
         } while (third == first || third == second);
 
         // dump out correct answer for debugging
-        System.out.println("ANSWER: " + first + " " + second + " " + third);
+        Log.d("answer", first + " " + second + " " + third);
     }
 
     /**
@@ -113,7 +120,9 @@ public class Fermi {
 
         // increment guess counter
         guesses++;
-
+        if(out.contains("Fermi Fermi Fermi")){
+            win = true;
+        }
         // return feedback string (remove space character at end of string)
         return out.substring(0, out.length() - 1);
     }
