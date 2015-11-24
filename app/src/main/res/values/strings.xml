@@ -6,4 +6,5 @@
     <string name="instructions">Enter your three guesses (0-9):</string>
     <string name="btnOk">OK</string>
     <string name="btnReset">Reset</string>
+    <string name="txtGuesses">\?\?\?</string>
 </resources>

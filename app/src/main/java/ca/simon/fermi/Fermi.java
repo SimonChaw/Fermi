@@ -3,6 +3,8 @@ package ca.simon.fermi;
 
 import android.util.Log;
 
+import java.util.List;
+
 /**
  *  Object Oriented Programming : Project II
  *  Fermi Guessing Game
@@ -18,7 +20,6 @@ public class Fermi {
     private int third;
     /** the number of guesses made for the current game */
     private int guesses;
-
     private boolean win;
 
     /**
@@ -76,54 +77,58 @@ public class Fermi {
     public String guess(int fst, int sec, int trd){
         String out = "";
 
-        int nanoCounter = 3;
-        int firstTarget = first;
-        int secondTarget = second;
-        int thirdTarget = third;
 
-        // first iteration to find fermis
-        if (fst == firstTarget) {
-            out += "Fermi ";
-            firstTarget = -1;
-            nanoCounter--;
-        }
-        if (sec == secondTarget) {
-            out += "Fermi ";
-            secondTarget = -1;
-            nanoCounter--;
-        }
-        if (trd == thirdTarget) {
-            out += "Fermi ";
-            thirdTarget = -1;
-            nanoCounter--;
-        }
 
-        // second iteration to find picos
-        if (fst == secondTarget || fst == thirdTarget) {
-            out += "Pico ";
-            nanoCounter--;
-        }
-        if (sec == firstTarget || sec == thirdTarget) {
-            out += "Pico ";
+            int nanoCounter = 3;
+            int firstTarget = first;
+            int secondTarget = second;
+            int thirdTarget = third;
 
-            nanoCounter--;
-        }
-        if (trd == firstTarget || trd == secondTarget) {
-            out += "Pico ";
-            nanoCounter--;
-        }
+            // first iteration to find fermis
+            if (fst == firstTarget) {
+                out += "Fermi ";
+                firstTarget = -1;
+                nanoCounter--;
+            }
+            if (sec == secondTarget) {
+                out += "Fermi ";
+                secondTarget = -1;
+                nanoCounter--;
+            }
+            if (trd == thirdTarget) {
+                out += "Fermi ";
+                thirdTarget = -1;
+                nanoCounter--;
+            }
 
-        // third iteration for nanos
-        for (int n=0; n<nanoCounter; n++){
-            out += "Nano ";
-        }
+            // second iteration to find picos
+            if (fst == secondTarget || fst == thirdTarget) {
+                out += "Pico ";
+                nanoCounter--;
+            }
+            if (sec == firstTarget || sec == thirdTarget) {
+                out += "Pico ";
 
-        // increment guess counter
-        guesses++;
-        if(out.contains("Fermi Fermi Fermi")){
-            win = true;
-        }
-        // return feedback string (remove space character at end of string)
-        return out.substring(0, out.length() - 1);
+                nanoCounter--;
+            }
+            if (trd == firstTarget || trd == secondTarget) {
+                out += "Pico ";
+                nanoCounter--;
+            }
+
+            // third iteration for nanos
+            for (int n = 0; n < nanoCounter; n++) {
+                out += "Nano ";
+            }
+
+            // increment guess counter
+            guesses++;
+            if (out.contains("Fermi Fermi Fermi")) {
+                win = true;
+            }
+            // return feedback string (remove space character at end of string)
+            return out.substring(0, out.length() - 1);
     }
+
+
 }

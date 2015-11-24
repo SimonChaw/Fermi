@@ -1,7 +1,9 @@
 package ca.simon.fermi;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,8 +11,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class MainActivity extends AppCompatActivity {
     //UI Controls
@@ -23,12 +32,15 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter arrayAdapter;
     Boolean firstGuess;
     Fermi fermi;
+    private ArrayList<String> guessList = new ArrayList<>();
+    private Toast popup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        guessList.add("init");
+        popup = Toast.makeText(this,"",Toast.LENGTH_SHORT);
         //GET CONTROLS
             //spinners
         spinner1 = (Spinner) findViewById(R.id.spinner1);
@@ -39,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         btnReset = (Button) findViewById(R.id.btnReset);
             //TextViews
         txtGuesses = (TextView) findViewById(R.id.txtGuesses);
+        txtGuesses.setMovementMethod(new ScrollingMovementMethod());
         fermi = new Fermi();
         Integer[] num = {0,1,2,3,4,5,6,7,8,9};
         arrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, num);
@@ -86,20 +99,46 @@ public class MainActivity extends AppCompatActivity {
             txtGuesses.setText("");
             firstGuess = false;
         }
-        txtGuesses.setText(fermi.guess((Integer) spinner1.getSelectedItem(),
-                (Integer) spinner2.getSelectedItem(), (Integer) spinner3.getSelectedItem()) + "\n" + txtGuesses.getText());
-        if(fermi.win()){
-            onWin();
+        if(alreadyGuessed(Integer.toString((Integer) spinner1.getSelectedItem())
+                + Integer.toString((Integer) spinner2.getSelectedItem()) + Integer.toString((Integer) spinner3.getSelectedItem()))) {
+                toastMe("Sorry! You've already made this guess!");
+        }else {
+            guessList.add(Integer.toString((Integer) spinner1.getSelectedItem())
+                    + Integer.toString((Integer) spinner2.getSelectedItem()) + Integer.toString((Integer) spinner3.getSelectedItem()));
+            txtGuesses.setText(fermi.guess((Integer) spinner1.getSelectedItem(),
+                    (Integer) spinner2.getSelectedItem(), (Integer) spinner3.getSelectedItem()) + "\n" + txtGuesses.getText());
+            if (fermi.win()) {
+                onWin();
+            }
         }
     }
 
     public void Reset(){
         fermi.reset();
+        txtGuesses.setText("???");
+        firstGuess = true;
         btnOk.setEnabled(true);
+        guessList.clear();
+        guessList.add("init");
     }
 
     public void onWin(){
         txtGuesses.setText("Congrats! Total Guesses: " + fermi.getGuesses() + "\n" + txtGuesses.getText());
         btnOk.setEnabled(false);
     }
+
+    public boolean alreadyGuessed(String submitedGuess){
+        for(String guess : guessList){
+            if(guess.equals(submitedGuess)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void toastMe(String msg){
+        popup.setText(msg);
+        popup.show();
+    }
+
 }

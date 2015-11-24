@@ -75,7 +75,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="400dp"
-            android:id="@+id/txtGuesses" />
+            android:id="@+id/txtGuesses"
+            android:text="@string/txtGuesses"
+            android:scrollbars="vertical"
+            />
 
     </LinearLayout>
 
