@@ -1,6 +1,8 @@
 package ca.simon.fermi;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
  *  @author Sean Morrow
  */
 
-public class Fermi {
+public class Fermi implements Parcelable {
     /** The first random digit to be guessed in the game of Fermi. */
     private int first;
     /** The second random digit to be guessed in the game of Fermi. */
@@ -79,56 +81,91 @@ public class Fermi {
 
 
 
-            int nanoCounter = 3;
-            int firstTarget = first;
-            int secondTarget = second;
-            int thirdTarget = third;
+        int nanoCounter = 3;
+        int firstTarget = first;
+        int secondTarget = second;
+        int thirdTarget = third;
 
-            // first iteration to find fermis
-            if (fst == firstTarget) {
-                out += "Fermi ";
-                firstTarget = -1;
-                nanoCounter--;
-            }
-            if (sec == secondTarget) {
-                out += "Fermi ";
-                secondTarget = -1;
-                nanoCounter--;
-            }
-            if (trd == thirdTarget) {
-                out += "Fermi ";
-                thirdTarget = -1;
-                nanoCounter--;
-            }
+        // first iteration to find fermis
+        if (fst == firstTarget) {
+            out += "Fermi ";
+            firstTarget = -1;
+            nanoCounter--;
+        }
+        if (sec == secondTarget) {
+            out += "Fermi ";
+            secondTarget = -1;
+            nanoCounter--;
+        }
+        if (trd == thirdTarget) {
+            out += "Fermi ";
+            thirdTarget = -1;
+            nanoCounter--;
+        }
 
-            // second iteration to find picos
-            if (fst == secondTarget || fst == thirdTarget) {
-                out += "Pico ";
-                nanoCounter--;
-            }
-            if (sec == firstTarget || sec == thirdTarget) {
-                out += "Pico ";
+        // second iteration to find picos
+        if (fst == secondTarget || fst == thirdTarget) {
+            out += "Pico ";
+            nanoCounter--;
+        }
+        if (sec == firstTarget || sec == thirdTarget) {
+            out += "Pico ";
 
-                nanoCounter--;
-            }
-            if (trd == firstTarget || trd == secondTarget) {
-                out += "Pico ";
-                nanoCounter--;
-            }
+            nanoCounter--;
+        }
+        if (trd == firstTarget || trd == secondTarget) {
+            out += "Pico ";
+            nanoCounter--;
+        }
 
-            // third iteration for nanos
-            for (int n = 0; n < nanoCounter; n++) {
-                out += "Nano ";
-            }
+        // third iteration for nanos
+        for (int n = 0; n < nanoCounter; n++) {
+            out += "Nano ";
+        }
 
-            // increment guess counter
-            guesses++;
-            if (out.contains("Fermi Fermi Fermi")) {
-                win = true;
-            }
-            // return feedback string (remove space character at end of string)
-            return out.substring(0, out.length() - 1);
+        // increment guess counter
+        guesses++;
+        if (out.contains("Fermi Fermi Fermi")) {
+            win = true;
+        }
+        // return feedback string (remove space character at end of string)
+        return out.substring(0, out.length() - 1);
     }
 
 
+
+    protected Fermi(Parcel in) {
+        first = in.readInt();
+        second = in.readInt();
+        third = in.readInt();
+        guesses = in.readInt();
+        win = in.readByte() != 0x00;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(first);
+        dest.writeInt(second);
+        dest.writeInt(third);
+        dest.writeInt(guesses);
+        dest.writeByte((byte) (win ? 0x01 : 0x00));
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Fermi> CREATOR = new Parcelable.Creator<Fermi>() {
+        @Override
+        public Fermi createFromParcel(Parcel in) {
+            return new Fermi(in);
+        }
+
+        @Override
+        public Fermi[] newArray(int size) {
+            return new Fermi[size];
+        }
+    };
 }
