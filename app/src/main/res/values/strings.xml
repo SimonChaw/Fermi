@@ -3,4 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="instructions">Enter your three guesses (0-9):</string>
+    <string name="btnOk">OK</string>
+    <string name="btnReset">Reset</string>
 </resources>
