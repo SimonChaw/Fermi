@@ -1,6 +1,5 @@
 package ca.simon.fermi;
 
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -12,14 +11,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 public class MainActivity extends AppCompatActivity {
     //UI Controls
@@ -120,14 +112,15 @@ public class MainActivity extends AppCompatActivity {
             txtGuesses.setText("");
             firstGuess = false;
         }
+        String guess = (spinner1.getSelectedItem().toString()+ " " +
+                spinner2.getSelectedItem().toString() + " " + spinner3.getSelectedItem().toString() + " ");
         //if the user already made this guess display a message
-        if(alreadyGuessed(Integer.toString((Integer) spinner1.getSelectedItem())
-                + Integer.toString((Integer) spinner2.getSelectedItem()) + Integer.toString((Integer) spinner3.getSelectedItem()))) {
+        if(fermi.alreadyGuessed(guess, guessList)){
                 toastMe("Sorry! You've already made this guess!");
         }else {//else add it to the arraylist and make the guess
-            guessList.add(Integer.toString((Integer) spinner1.getSelectedItem())
-                    + Integer.toString((Integer) spinner2.getSelectedItem()) + Integer.toString((Integer) spinner3.getSelectedItem()));
-            txtGuesses.setText(fermi.guess((Integer) spinner1.getSelectedItem(),
+
+            guessList.add(guess);
+            txtGuesses.setText(guess + ":\t\t" + fermi.guess((Integer) spinner1.getSelectedItem(),
                     (Integer) spinner2.getSelectedItem(), (Integer) spinner3.getSelectedItem()) + "\n" + txtGuesses.getText());
             //check if the player has won
             if (fermi.win()) {
@@ -168,15 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //if the guess is in the array list do not allow it to run.
-    public boolean alreadyGuessed(String submitedGuess){
-        for(String guess : guessList){
-            if(guess.equals(submitedGuess)){
-                return true;
-            }
-        }
-        return false;
-    }
+
 
     private void toastMe(String msg){
         popup.setText(msg);

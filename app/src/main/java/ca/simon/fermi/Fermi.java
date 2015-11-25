@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -133,6 +134,15 @@ public class Fermi implements Parcelable {
     }
 
 
+    //if the guess is in the array list do not allow it to run.
+    public boolean alreadyGuessed(String submitedGuess, ArrayList<String> guessList){
+        for(String guess : guessList){
+            if(guess.equals(submitedGuess)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     protected Fermi(Parcel in) {
         first = in.readInt();

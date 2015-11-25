@@ -55,13 +55,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnOk"
-            android:text="@string/btnOk" />
+            android:text="@string/btnOk"
+            android:background="@drawable/button"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnReset"
-            android:text="@string/btnReset" />
+            android:text="@string/btnReset"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/button"/>
 
 
     </LinearLayout>
@@ -69,8 +72,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ButtonContainer"
-        android:foreground="#ff0016">
+        android:layout_marginTop="25dp"
+        android:layout_below="@id/ButtonContainer">
 
         <TextView
             android:layout_width="match_parent"
